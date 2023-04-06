@@ -27,6 +27,13 @@ if st.button("Submit"):
         "rating": [mood_rating],
         "notes": [notes]
     })
+    if st.button("Download Mood Data"):
+    st.download_button(
+        label="Download CSV",
+        data=mood_data.to_csv(index=False),
+        file_name="mood_data.csv",
+        mime="text/csv"
+    )
 
     # Concatenate the existing mood data with the new data
     mood_data = pd.concat([mood_data, new_data], ignore_index=True)
