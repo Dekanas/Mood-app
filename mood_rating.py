@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import altair as alt
 
 # Load the mood data from a CSV file
 mood_data = pd.read_csv("mood_data.csv")
@@ -18,18 +19,32 @@ mood_rating = st.radio("", [1, 2, 3, 4, 5])
 # Add a text input for notes
 notes = st.text_input("Add notes (optional):")
 
-# Create a new DataFrame for the current mood rating
-new_data = pd.DataFrame({
-    "date": [selected_date],
-    "rating": [mood_rating],
-    "notes": [notes]
-})
+# Add a "Submit" button
+if st.button("Submit"):
+    # Create a new DataFrame for the current mood rating
+    new_data = pd.DataFrame({
+        "date": [selected_date],
+        "rating": [mood_rating],
+        "notes": [notes]
+    })
 
-# Concatenate the existing mood data with the new data
-mood_data = pd.concat([mood_data, new_data], ignore_index=True)
+    # Concatenate the existing mood data with the new data
+    mood_data = pd.concat([mood_data, new_data], ignore_index=True)
 
-# Save the updated mood data to the CSV file
-mood_data.to_csv("mood_data.csv", index=False)
+    # Save the updated mood data to the CSV file
+    mood_data.to_csv("mood_data.csv", index=False)
+
+    # Display a line chart of the mood rating over time
+    chart_data = mood_data[["date", "rating"]]
+    chart = alt.Chart(chart_data).mark_line().encode(
+        x="date:T",
+        y="rating:Q"
+    ).properties(
+        width=600,
+        height=400,
+        title="Mood Rating Over Time"
+    )
+    st.altair_chart(chart)
 
 # Display the user's mood rating and notes for the selected date
 st.write("You rated your mood on", selected_date, "as", mood_rating)
@@ -37,13 +52,4 @@ if notes:
     st.write("Notes:", notes)
 else:
     st.write("No notes added.")
-
-# Add a button to download the mood data as a CSV file
-if st.button("Download Mood Data"):
-    st.download_button(
-        label="Download CSV",
-        data=mood_data.to_csv(index=False),
-        file_name="mood_data.csv",
-        mime="text/csv"
-    )
 
