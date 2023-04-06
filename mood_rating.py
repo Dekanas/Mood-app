@@ -37,3 +37,13 @@ if notes:
     st.write("Notes:", notes)
 else:
     st.write("No notes added.")
+
+# Add a button to download the mood data as a CSV file
+if st.button("Download Mood Data"):
+    st.download_button(
+        label="Download CSV",
+        data=mood_data.to_csv(index=False),
+        file_name="mood_data.csv",
+        mime="text/csv"
+    )
+
