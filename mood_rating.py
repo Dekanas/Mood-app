@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import base64
 
 # Load the mood data from a CSV file
 mood_data = pd.read_csv("mood_data.csv")
@@ -27,13 +28,6 @@ if st.button("Submit"):
         "rating": [mood_rating],
         "notes": [notes]
     })
-    if st.button("Download Mood Data"):
-        st.download_button(
-            label="Download CSV",
-            data=mood_data.to_csv(index=False),
-            file_name="mood_data.csv",
-            mime="text/csv"
-    )
 
     # Concatenate the existing mood data with the new data
     mood_data = pd.concat([mood_data, new_data], ignore_index=True)
@@ -59,4 +53,13 @@ if notes:
     st.write("Notes:", notes)
 else:
     st.write("No notes added.")
+
+# Add a download button for the mood data
+def download_csv():
+    csv_file = mood_data.to_csv(index=False)
+    b64 = base64.b64encode(csv_file.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="mood_data.csv">Download Mood Data</a>'
+    return href
+
+st.markdown(download_csv(), unsafe_allow_html=True)
 
