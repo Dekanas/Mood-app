@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 # Load the mood data from a CSV file
-mood_data = pd.DataFrame()
+mood_data = pd.read_csv("mood_data.csv")
 
 # Display a header and subheader
 st.header("Mood Tracker")
