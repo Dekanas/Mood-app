@@ -28,11 +28,11 @@ if st.button("Submit"):
         "notes": [notes]
     })
     if st.button("Download Mood Data"):
-    st.download_button(
-        label="Download CSV",
-        data=mood_data.to_csv(index=False),
-        file_name="mood_data.csv",
-        mime="text/csv"
+        st.download_button(
+            label="Download CSV",
+            data=mood_data.to_csv(index=False),
+            file_name="mood_data.csv",
+            mime="text/csv"
     )
 
     # Concatenate the existing mood data with the new data
